@@ -52,14 +52,25 @@ function closeModal(){document.getElementById('modal').classList.remove('show')}
     style="width: 100%; padding: 12px; margin: 15px 0; border-radius: 8px; border: 1px solid #ccc;"
   >
 
-  <div id="slidesList" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+  
+<div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin:15px 0;">
+  <button onclick="filterSubject('all')">Усі</button>
+  <button onclick="filterSubject('Математика')">Математика</button>
+  <button onclick="filterSubject('Історія')">Історія</button>
+  <button onclick="filterSubject('Біологія')">Біологія</button>
+  <button onclick="filterSubject('Географія')">Географія</button>
+  <button onclick="filterSubject('Фізика')">Фізика</button>
+  <button onclick="filterSubject('Англійська')">Англійська</button>
+  <button onclick="filterSubject('Українська')">Українська література</button>
+</div>
+<div id="slidesList" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
 
     <div class="slide-card" style="padding: 20px; border: 1px solid #ddd; border-radius: 12px;">
       <h3>🌍 Географія України</h3>
       <p>Цікава презентація про нашу країну.</p>
       <strong style="color: green;">Безкоштовно</strong>
       <br><br>
-      <button onclick="alert('Незабаром тут буде завантаження!')">Переглянути</button>
+     <a href="presentation.html?subject=geography" class="view-button">Переглянути</a>
     </div>
 
     <div class="slide-card" style="padding: 20px; border: 1px solid #ddd; border-radius: 12px;">
