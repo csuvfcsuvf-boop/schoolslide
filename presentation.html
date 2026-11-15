@@ -1,1 +1,65 @@
 
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Презентація — SchoolSlide</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6fb;
+      margin: 0;
+      padding: 30px;
+      text-align: center;
+    }
+    .card {
+      max-width: 650px;
+      margin: 40px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px #0001;
+    }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 20px;
+      background: #4169e1;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1 id="title">Презентація</h1>
+    <p id="description">Інформація про презентацію.</p>
+    <a href="index.html">← Назад до каталогу</a>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const subject = params.get("subject");
+
+    const presentations = {
+      geography: {
+        title: "Географія України",
+        description: "Презентація про географічне положення, природу та ресурси України."
+      }
+    };
+
+    const presentation = presentations[subject];
+
+    if (presentation) {
+      document.getElementById("title").textContent = presentation.title;
+      document.getElementById("description").textContent = presentation.description;
+    } else {
+      document.getElementById("title").textContent = "Презентацію не знайдено";
+      document.getElementById("description").textContent = "Поверніться до каталогу та виберіть іншу презентацію.";
+    }
+  </script>
+</body>
+</html>
+
