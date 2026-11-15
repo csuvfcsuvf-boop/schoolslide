@@ -40,4 +40,57 @@ document.getElementById('search').addEventListener('keydown',e=>{if(e.key==='Ent
 function showDetails(i){let x=items[i];document.getElementById('modalTitle').textContent=x.title;document.getElementById('modalText').textContent=`${x.cat} · ${x.grade} · ${x.slides} слайдів · демонстраційна ціна ${x.price}. Тут згодом буде опис, приклади слайдів і спосіб отримання файлу.`;document.getElementById('modal').classList.add('show')}
 function closeModal(){document.getElementById('modal').classList.remove('show')}document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});render();
 </script>
+
+<section id="catalog" style="padding: 30px 20px; max-width: 1100px; margin: auto;">
+  <h2 style="text-align: center;">📚 Каталог презентацій</h2>
+
+  <input
+    type="text"
+    id="searchSlides"
+    placeholder="🔍 Знайти презентацію..."
+    oninput="searchPresentations()"
+    style="width: 100%; padding: 12px; margin: 15px 0; border-radius: 8px; border: 1px solid #ccc;"
+  >
+
+  <div id="slidesList" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px;">
+
+    <div class="slide-card" style="padding: 20px; border: 1px solid #ddd; border-radius: 12px;">
+      <h3>🌍 Географія України</h3>
+      <p>Цікава презентація про нашу країну.</p>
+      <strong style="color: green;">Безкоштовно</strong>
+      <br><br>
+      <button onclick="alert('Незабаром тут буде завантаження!')">Переглянути</button>
+    </div>
+
+    <div class="slide-card" style="padding: 20px; border: 1px solid #ddd; border-radius: 12px;">
+      <h3>🧬 Біологія</h3>
+      <p>Світ клітин та живих організмів.</p>
+      <strong style="color: green;">Безкоштовно</strong>
+      <br><br>
+      <button onclick="alert('Незабаром тут буде завантаження!')">Переглянути</button>
+    </div>
+
+    <div class="slide-card" style="padding: 20px; border: 1px solid #ddd; border-radius: 12px;">
+      <h3>📖 Українська література</h3>
+      <p>Цікаві факти про українських письменників.</p>
+      <strong>Платна — 30 грн</strong>
+      <br><br>
+      <button onclick="alert('Незабаром тут буде замовлення!')">Замовити</button>
+    </div>
+
+  </div>
+</section>
+
+<script>
+function searchPresentations() {
+  const search = document.getElementById("searchSlides").value.toLowerCase();
+  const cards = document.querySelectorAll(".slide-card");
+
+  cards.forEach(card => {
+    card.style.display = card.innerText.toLowerCase().includes(search)
+      ? "block"
+      : "none";
+  });
+}
+</script>
 </body></html>
