@@ -1,0 +1,378 @@
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Шкільні будні</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: #101827;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 5%;
+  background: #172438;
+  border-bottom: 2px solid #293b53;
+}
+header a { color: #b9d7ff; text-decoration: none; }
+header button, button {
+  cursor: pointer;
+  border: 0;
+  border-radius: 9px;
+  padding: 11px 17px;
+  background: #e6ad28;
+  color: #172033;
+  font-weight: bold;
+}
+main { max-width: 950px; margin: 25px auto; padding: 0 15px; }
+.panel {
+  background: #1b2b40;
+  padding: 22px;
+  border-radius: 14px;
+  margin-bottom: 18px;
+}
+h1, h2 { margin-top: 0; }
+.muted { color: #b7c6d8; }
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+.stat {
+  background: #263c56;
+  padding: 10px 14px;
+  border-radius: 8px;
+}
+.scene {
+  height: 340px;
+  position: relative;
+  overflow: hidden;
+  border: 3px solid #53677e;
+  border-radius: 12px;
+  background: linear-gradient(#253650 0 68%, #604b43 68% 100%);
+}
+.window {
+  position: absolute;
+  right: 7%;
+  top: 9%;
+  width: 27%;
+  height: 43%;
+  border: 9px solid #182638;
+  background: linear-gradient(#192b45, #647b8e);
+}
+.window:before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  height: 100%;
+  border-left: 5px solid #182638;
+}
+.window:after {
+  content: "✦  ·  ✦";
+  color: #f5e5a6;
+  position: absolute;
+  top: 20%;
+  left: 15%;
+}
+.board {
+  position: absolute;
+  left: 5%;
+  top: 9%;
+  width: 38%;
+  height: 40%;
+  background: #285448;
+  border: 8px solid #705443;
+  color: #e1f1d9;
+  text-align: center;
+  padding-top: 25px;
+  font-size: 20px;
+}
+.desk {
+  position: absolute;
+  bottom: 12%;
+  left: 31%;
+  width: 39%;
+  height: 13%;
+  background: #a66b42;
+  border-bottom: 12px solid #60402f;
+}
+.person {
+  position: absolute;
+  bottom: 13%;
+  width: 75px;
+  height: 130px;
+}
+.teacher { left: 9%; }
+.student { right: 13%; }
+.head {
+  position: absolute;
+  top: 0;
+  left: 16px;
+  width: 46px;
+  height: 48px;
+  border-radius: 35% 35% 42% 42%;
+  background: #d6a078;
+}
+.body-person {
+  position: absolute;
+  top: 43px;
+  left: 5px;
+  width: 68px;
+  height: 82px;
+  background: #4774a3;
+  clip-path: polygon(20% 0,80% 0,100% 100%,0 100%);
+}
+.teacher .body-person { background: #82649c; }
+.dialogue {
+  background: #263b54;
+  border: 2px solid #607c9b;
+  padding: 17px;
+  border-radius: 12px;
+  margin-top: 15px;
+}
+.answers { display: grid; gap: 9px; margin-top: 14px; }
+.answers button {
+  background: #314b68;
+  color: white;
+  text-align: left;
+}
+.answers button:hover { background: #456789; }
+.hidden { display: none; }
+.grade {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #40536a;
+  padding: 10px 0;
+}
+footer { text-align: center; color: #8fa2b8; padding: 20px; }
+</style>
+</head>
+<body>
+
+<header>
+  <strong>🎒 Шкільні будні</strong>
+  <a href="index.html">← Назад на сайт</a>
+</header>
+
+<main>
+  <section id="start" class="panel">
+    <h1>Твоя шкільна історія</h1>
+    <p class="muted">Ти — звичайний школяр. На тебе чекають уроки, знайомства, розмови та оцінки.</p>
+    <h3>Обери свій рівень знань:</h3>
+    <div class="answers">
+      <button onclick="startGame('Легкий')">🟢 Початківець</button>
+      <button onclick="startGame('Середній')">🟡 Середній</button>
+      <button onclick="startGame('Складний')">🔴 Високий</button>
+    </div>
+  </section>
+
+  <section id="game" class="hidden">
+    <div class="stats">
+      <div class="stat" id="day">📅 День 1</div>
+      <div class="stat" id="clock">🕘 08:30</div>
+      <div class="stat" id="level">🎓 Рівень</div>
+      <button onclick="showGrades()">📖 Щоденник</button>
+    </div>
+
+    <div class="scene">
+      <div class="window"></div>
+      <div class="board">ШКОЛА<br>Урок починається!</div>
+      <div class="person teacher">
+        <div class="head"></div>
+        <div class="body-person"></div>
+      </div>
+      <div class="person student">
+        <div class="head"></div>
+        <div class="body-person"></div>
+      </div>
+      <div class="desk"></div>
+    </div>
+
+    <div class="dialogue">
+      <h3 id="speaker">Учитель</h3>
+      <p id="dialogueText">Доброго ранку! Починаємо урок.</p>
+      <div id="answers" class="answers"></div>
+      <button id="next" class="hidden" onclick="nextLesson()">Наступний урок →</button>
+    </div>
+  </section>
+
+  <section id="diary" class="panel hidden">
+    <h2>📖 Електронний щоденник</h2>
+    <div id="grades"></div>
+    <p id="average"></p>
+    <button onclick="closeDiary()">Повернутися до гри</button>
+  </section>
+</main>
+
+<footer>Шкільні будні — твоя власна історія</footer>
+
+<script>
+const schedules = [
+  ["Математика", "Українська мова", "Історія", "Біологія"],
+  ["Географія", "Англійська мова", "Математика", "Фізика"],
+  ["Українська література", "Біологія", "Історія", "Англійська мова"],
+  ["Фізика", "Математика", "Географія", "Українська мова"]
+];
+
+const questions = {
+  "Математика": {
+    easy: ["Скільки буде 5 + 7?", ["10", "12", "14"], 1],
+    medium: ["Скільки буде 12 × 8?", ["86", "96", "108"], 1],
+    hard: ["Розв'яжи: 3x + 5 = 20", ["x = 5", "x = 10", "x = 15"], 0]
+  },
+  "Українська мова": {
+    easy: ["Яка частина мови відповідає на питання «хто? що?»", ["Дієслово", "Іменник", "Прикметник"], 1],
+    medium: ["Яке слово є прикметником?", ["Весело", "Швидкий", "Бігти"], 1],
+    hard: ["У якому слові пишеться апостроф?", ["Свято", "М'ята", "Цвях"], 1]
+  },
+  "Історія": {
+    easy: ["Як називалася столиця Русі?", ["Київ", "Львів", "Чернігів"], 0],
+    medium: ["Хто був першим президентом України?", ["Леонід Кравчук", "Віктор Ющенко", "Леонід Кучма"], 0],
+    hard: ["У якому році проголошено незалежність України?", ["1989", "1991", "1996"], 1]
+  },
+  "Біологія": {
+    easy: ["Який орган перекачує кров?", ["Легені", "Серце", "Шлунок"], 1],
+    medium: ["Що виробляють рослини під час фотосинтезу?", ["Кисень", "Азот", "Гелій"], 0],
+    hard: ["Яка частина клітини містить ДНК?", ["Ядро", "Мембрана", "Вакуоля"], 0]
+  },
+  "Географія": {
+    easy: ["Яка найбільша країна Європи за площею?", ["Україна", "Франція", "Іспанія"], 0],
+    medium: ["Який океан найбільший?", ["Атлантичний", "Тихий", "Індійський"], 1],
+    hard: ["Яка найвища вершина України?", ["Говерла", "Петрос", "Роман-Кош"], 0]
+  },
+  "Англійська мова": {
+    easy: ["Як перекладається «cat»?", ["Собака", "Кіт", "Птах"], 1],
+    medium: ["Яка форма минулого часу дієслова go?", ["Goed", "Gone", "Went"], 2],
+    hard: ["Оберіть правильне речення:", ["She don't know", "She doesn't know", "She not know"], 1]
+  },
+  "Фізика": {
+    easy: ["У яких одиницях вимірюють час?", ["Метри", "Секунди", "Кілограми"], 1],
+    medium: ["Яка одиниця вимірювання сили?", ["Ньютон", "Ват", "Паскаль"], 0],
+    hard: ["Яка формула швидкості?", ["v = s/t", "v = s × t", "v = t/s"], 0]
+  },
+  "Українська література": {
+    easy: ["Хто написав «Кобзар»?", ["Іван Франко", "Тарас Шевченко", "Леся Українка"], 1],
+    medium: ["Хто автор «Лісової пісні»?", ["Леся Українка", "Іван Нечуй-Левицький", "Панас Мирний"], 0],
+    hard: ["До якого жанру належить «Лісова пісня»?", ["Комедія", "Драма-феєрія", "Байка"], 1]
+  }
+};
+
+let day = 1;
+let lesson = 0;
+let level = "Середній";
+let grades = JSON.parse(localStorage.getItem("schoolGrades") || "[]");
+let schedule = [];
+
+function startGame(chosen) {
+  level = chosen;
+  document.getElementById("start").classList.add("hidden");
+  document.getElementById("game").classList.remove("hidden");
+  document.getElementById("level").textContent = "🎓 " + level;
+  loadDay();
+}
+
+function loadDay() {
+  lesson = 0;
+  schedule = schedules[(day - 1) % schedules.length];
+  document.getElementById("day").textContent = "📅 День " + day;
+  showLesson();
+}
+
+function showLesson() {
+  const subject = schedule[lesson];
+  const times = ["08:30", "09:25", "10:20", "11:15"];
+  document.getElementById("clock").textContent = "🕘 " + times[lesson];
+  document.getElementById("speaker").textContent = "Учитель: " + subject;
+  document.getElementById("dialogueText").textContent =
+    "Доброго дня! Сьогодні вивчаємо тему з предмета «" + subject + "». Будь уважним!";
+  document.getElementById("next").classList.add("hidden");
+
+  const difficulty = level === "Легкий" ? "easy" :
+    level === "Складний" ? "hard" : "medium";
+  const q = questions[subject][difficulty];
+
+  const answers = document.getElementById("answers");
+  answers.innerHTML = "<strong>" + q[0] + "</strong>";
+
+  q[1].forEach((answer, index) => {
+    const button = document.createElement("button");
+    button.textContent = answer;
+    button.onclick = () => checkAnswer(index, q[2], subject);
+    answers.appendChild(button);
+  });
+}
+
+function checkAnswer(selected, correct, subject) {
+  const buttons = document.querySelectorAll("#answers button");
+  buttons.forEach(button => button.disabled = true);
+
+  const mark = selected === correct ? 12 : 6;
+  grades.push({day, subject, mark});
+  localStorage.setItem("schoolGrades", JSON.stringify(grades));
+
+  document.getElementById("dialogueText").textContent =
+    selected === correct
+    ? "Чудово! Правильна відповідь. Твоя оцінка — 12!"
+    : "Цього разу неправильно. Не засмучуйся, наступного разу вийде! Оцінка — 6.";
+
+  document.getElementById("next").classList.remove("hidden");
+}
+
+function nextLesson() {
+  lesson++;
+  if (lesson < schedule.length) {
+    showLesson();
+  } else {
+    document.getElementById("speaker").textContent = "Кінець навчального дня";
+    document.getElementById("dialogueText").textContent =
+      "Уроки закінчилися! Перевір свій електронний щоденник.";
+    document.getElementById("answers").innerHTML = "";
+    document.getElementById("next").textContent = "Почати наступний день";
+    document.getElementById("next").classList.remove("hidden");
+    document.getElementById("next").onclick = () => {
+      day++;
+      document.getElementById("next").textContent = "Наступний урок →";
+      document.getElementById("next").onclick = nextLesson;
+      loadDay();
+    };
+  }
+}
+
+function showGrades() {
+  document.getElementById("game").classList.add("hidden");
+  document.getElementById("diary").classList.remove("hidden");
+
+  const list = document.getElementById("grades");
+  list.innerHTML = "";
+  grades.forEach(item => {
+    const row = document.createElement("div");
+    row.className = "grade";
+    row.textContent = "День " + item.day + " — " + item.subject;
+    const mark = document.createElement("strong");
+    mark.textContent = item.mark;
+    row.appendChild(mark);
+    list.appendChild(row);
+  });
+
+  const average = grades.length
+    ? grades.reduce((sum, item) => sum + item.mark, 0) / grades.length
+    : 0;
+  document.getElementById("average").textContent =
+    grades.length ? "Середня оцінка: " + average.toFixed(1) : "Оцінок поки немає.";
+}
+
+function closeDiary() {
+  document.getElementById("diary").classList.add("hidden");
+  document.getElementById("game").classList.remove("hidden");
+}
+</script>
+</body>
+</html>
